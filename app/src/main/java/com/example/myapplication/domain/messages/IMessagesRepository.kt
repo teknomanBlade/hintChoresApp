@@ -6,4 +6,5 @@ interface IMessagesRepository {
     suspend fun getMessages(): List<ReminderMessage>
     suspend fun addMessage(text: String)
     suspend fun deleteMessage(id: Long)
+    suspend fun updateMessage(id: Long)
 }

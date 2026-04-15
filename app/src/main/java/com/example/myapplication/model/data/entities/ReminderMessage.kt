@@ -7,5 +7,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ReminderMessage(
     val id: Long,
-    val text: String
+    val text: String,
+    val isFavorite: Boolean = false
 )

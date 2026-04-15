@@ -9,6 +9,7 @@ import com.example.myapplication.domain.usecase.AddMessageUseCase
 import com.example.myapplication.domain.usecase.CreateReminderUseCase
 import com.example.myapplication.domain.usecase.DeleteMessageUseCase
 import com.example.myapplication.domain.usecase.GetMessagesUseCase
+import com.example.myapplication.domain.usecase.UpdateMessageUseCase
 import com.example.myapplication.model.data.provider.NotificationProvider
 import com.example.myapplication.model.data.ReminderPreferences
 import com.example.myapplication.model.data.ReminderScheduler
@@ -42,10 +43,11 @@ val appModule = module {
 
     // Repository
     single { ReminderRepository(get(), get()) }
+    factory { UpdateMessageUseCase(get()) }
     worker { ReminderWorker(androidContext(), get(), get()) }
     // ViewModel
     viewModel { MainViewModel(get(),get(), get(), get()) }
-    viewModel { MessagesViewModel(get(), get(), get()) }
+    viewModel { MessagesViewModel(get(), get(), get(),get()) }
     viewModel { MessagesPickerViewModel(get()) }
     viewModel { PermissionViewModel(get(), get()) }
 }

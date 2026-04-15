@@ -22,4 +22,21 @@ class MessagesRepository (private val local: MessagesLocalDataSource
         val updated = local.getMessages().filterNot { it.id == id }
         local.saveMessages(updated)
     }
+
+    override suspend fun updateMessage(id: Long) = mutex.withLock {
+        // 1. Obtenemos la lista actual
+        val currentMessages = local.getMessages()
+
+        // 2. Mapeamos la lista: si el ID coincide, invertimos el favorito; si no, dejamos el mensaje igual
+        val updatedList = currentMessages.map { message ->
+            if (message.id == id) {
+                message.copy(isFavorite = !message.isFavorite) // Usamos copy para cambiar solo esa propiedad
+            } else {
+                message // Mantenemos los demás mensajes tal cual
+            }
+        }
+
+        // 3. Guardamos la lista completa (ahora con todos los mensajes)
+        local.saveMessages(updatedList)
+    }
 }

@@ -15,6 +15,9 @@ class MessagesPickerViewModel(private val getMessages: GetMessagesUseCase
     val messages: StateFlow<List<ReminderMessage>> = _messages
 
     init {
+        getMessages()
+    }
+    fun getMessages(){
         viewModelScope.launch {
             _messages.value = getMessages.invoke()
         }
