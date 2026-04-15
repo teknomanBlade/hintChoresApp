@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">HintChoresApp</string>
+    <string name="title_activity_permission">PermissionActivity</string>
+    <string name="title_activity_widget_camera">WidgetCameraActivity</string>
+</resources>

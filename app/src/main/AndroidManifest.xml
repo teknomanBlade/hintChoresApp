@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+    <application
+        android:name=".HintChoresApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher_hint_chores"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_hint_chores_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MyApplication"
+        tools:targetApi="31">
+        <activity
+            android:name=".view.activities.WidgetCameraActivity"
+            android:exported="false"
+            android:label="@string/title_activity_widget_camera"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".view.activities.PermissionActivity"
+            android:exported="true"
+            android:label="@string/title_activity_permission"
+            android:theme="@style/Theme.MyApplication">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.activities.MainActivity"
+            android:theme="@style/Theme.MyApplication" />
+
+        <service
+            android:name=".model.service.ShakeService"
+            android:foregroundServiceType="specialUse" />
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="none"
+                tools:node="remove" />
+        </provider>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        <receiver
+            android:name="com.example.myapplication.model.data.provider.widget.ReminderWidgetProvider"
+            android:exported="true"
+            android:label="Recordatorio rápido">
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/reminder_widget_info"/>
+        </receiver>
+        <receiver
+            android:name=".core.widget.ReminderWidgetReceiver"
+            android:exported="true" />
+    </application>
+
+</manifest>
