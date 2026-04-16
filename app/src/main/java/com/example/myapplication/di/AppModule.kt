@@ -3,11 +3,13 @@ package com.example.myapplication.di
 import com.example.myapplication.core.data.coroutines.DefaultDispatchersProvider
 import com.example.myapplication.core.firstrun.FirstRunManager
 import com.example.myapplication.core.messages.MessagesLocalDataSource
+import com.example.myapplication.domain.coroutines.IDispatchersProvider
 import com.example.myapplication.domain.messages.IMessagesRepository
 import com.example.myapplication.domain.messages.MessagesRepository
 import com.example.myapplication.domain.usecase.AddMessageUseCase
 import com.example.myapplication.domain.usecase.CreateReminderUseCase
 import com.example.myapplication.domain.usecase.DeleteMessageUseCase
+import com.example.myapplication.domain.usecase.GetFavoriteMessageUseCase
 import com.example.myapplication.domain.usecase.GetMessagesUseCase
 import com.example.myapplication.domain.usecase.UpdateMessageUseCase
 import com.example.myapplication.model.data.provider.NotificationProvider
@@ -27,10 +29,11 @@ import org.koin.dsl.module
 val appModule = module {
     factory { AddMessageUseCase(get()) }
     factory { CreateReminderUseCase(get()) }
-    single { DefaultDispatchersProvider() }
+    single<IDispatchersProvider> { DefaultDispatchersProvider() }
     factory { DeleteMessageUseCase(get()) }
     single { FirstRunManager(androidContext()) }
     factory { GetMessagesUseCase(get()) }
+    factory { GetFavoriteMessageUseCase(get()) }
     single { MessagesLocalDataSource(androidContext()) }
 
     single<IMessagesRepository> { MessagesRepository(get()) }
@@ -46,7 +49,7 @@ val appModule = module {
     factory { UpdateMessageUseCase(get()) }
     worker { ReminderWorker(androidContext(), get(), get()) }
     // ViewModel
-    viewModel { MainViewModel(get(),get(), get(), get()) }
+    viewModel { MainViewModel(get(),get(), get(), get(),get()) }
     viewModel { MessagesViewModel(get(), get(), get(),get()) }
     viewModel { MessagesPickerViewModel(get()) }
     viewModel { PermissionViewModel(get(), get()) }

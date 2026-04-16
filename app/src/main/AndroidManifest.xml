@@ -25,12 +25,10 @@
         <activity
             android:name=".view.activities.WidgetCameraActivity"
             android:exported="false"
-            android:label="@string/title_activity_widget_camera"
             android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".view.activities.PermissionActivity"
             android:exported="true"
-            android:label="@string/title_activity_permission"
             android:theme="@style/Theme.MyApplication">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -45,7 +45,7 @@ fun MainScreen(vm: MainViewModel) {
     var serviceEnabled by remember { mutableStateOf(false) }
     var selectedDelay by remember { mutableIntStateOf(60) }
     var showPicker by remember { mutableStateOf(false) }
-    val delayOptions = listOf(15, 30, 60, 120)
+    val delayOptions = listOf(1,15, 30, 60, 120)
 
     Column(
         modifier = Modifier
@@ -53,15 +53,7 @@ fun MainScreen(vm: MainViewModel) {
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-
-        Text(
-            "Recordatorio de tareas",
-            fontSize = 26.sp,
-            fontWeight = FontWeight.Bold
-        )
-
         Text("Agitá el teléfono para crear un recordatorio automático")
-
         Spacer(Modifier.height(8.dp))
 
         // 🔘 Switch activar servicio

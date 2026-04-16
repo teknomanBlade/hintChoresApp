@@ -34,7 +34,7 @@ fun CameraReminderButton(vm: MainViewModel) {
         contract = ActivityResultContracts.TakePicture()
     ) { success ->
         if (success) {
-            vm.createPhotoReminder("Mensaje de prueba",photoPath)
+            vm.createPhotoReminderWithFavoriteMessage(photoPath)
             Toast.makeText(context, "Recordatorio creado 📸", Toast.LENGTH_SHORT).show()
         }
     }

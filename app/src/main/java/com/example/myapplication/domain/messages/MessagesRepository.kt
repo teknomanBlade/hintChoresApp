@@ -12,6 +12,11 @@ class MessagesRepository (private val local: MessagesLocalDataSource
     override suspend fun getMessages(): List<ReminderMessage> =
         local.getMessages()
 
+    override suspend fun getFavoriteMessage(): ReminderMessage? {
+        val messages = local.getMessages()
+        return messages.firstOrNull { it.isFavorite }
+    }
+
     override suspend fun addMessage(text: String) = mutex.withLock {
         val current = local.getMessages().toMutableList()
         current.add(ReminderMessage(System.currentTimeMillis(), text))

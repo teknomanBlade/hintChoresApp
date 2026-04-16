@@ -11,16 +11,17 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.domain.usecase.AddMessageUseCase
 import com.example.myapplication.domain.usecase.CreateReminderUseCase
+import com.example.myapplication.domain.usecase.GetFavoriteMessageUseCase
 import com.example.myapplication.model.data.repository.ReminderRepository
 import com.example.myapplication.model.service.ShakeService
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class MainViewModel(
     application: Application,
     private val repository: ReminderRepository,
     private val createReminder: CreateReminderUseCase,
-    private val createReminderMessage: AddMessageUseCase
+    private val createReminderMessage: AddMessageUseCase,
+    private val getFavoriteMessageUseCase: GetFavoriteMessageUseCase,
 ) : AndroidViewModel(application) {
 
     var delayMinutes by mutableIntStateOf(repository.getDelay())
@@ -40,6 +41,11 @@ class MainViewModel(
     }
     fun createPhotoReminder(message:String, imagePath: String) {
         createReminder.invoke(message, imagePath)
+    }
+    fun createPhotoReminderWithFavoriteMessage(imagePath: String){
+        viewModelScope.launch {
+            createReminder.invoke(getFavoriteMessageUseCase.invoke()?.text.toString(), imagePath)
+        }
     }
     fun toggleService(context: Context, enable: Boolean) {
         serviceEnabled = enable
