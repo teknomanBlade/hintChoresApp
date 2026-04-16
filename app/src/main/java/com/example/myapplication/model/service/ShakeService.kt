@@ -15,7 +15,6 @@ import com.example.myapplication.domain.coroutines.IDispatchersProvider
 import com.example.myapplication.domain.usecase.CreateReminderUseCase
 import com.example.myapplication.domain.usecase.GetFavoriteMessageUseCase
 import com.example.myapplication.model.data.ShakeDetector
-import com.example.myapplication.model.data.repository.ReminderRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
