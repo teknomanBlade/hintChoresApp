@@ -27,7 +27,7 @@
             android:exported="false"
             android:theme="@style/Theme.Transparent" />
         <activity
-            android:name=".view.activities.PermissionActivity"
+            android:name=".view.activities.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.MyApplication">
             <intent-filter>
@@ -36,9 +36,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".view.activities.MainActivity"
-            android:theme="@style/Theme.MyApplication" />
 
         <service
             android:name=".model.service.ShakeService"

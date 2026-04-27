@@ -8,9 +8,13 @@ import com.example.myapplication.domain.messages.IMessagesRepository
 import com.example.myapplication.domain.messages.MessagesRepository
 import com.example.myapplication.domain.usecase.AddMessageUseCase
 import com.example.myapplication.domain.usecase.CreateReminderUseCase
+import com.example.myapplication.domain.usecase.CreateReminderWithTimePickerUseCase
 import com.example.myapplication.domain.usecase.DeleteMessageUseCase
+import com.example.myapplication.domain.usecase.DeleteSelectedMessageUseCase
 import com.example.myapplication.domain.usecase.GetFavoriteMessageUseCase
 import com.example.myapplication.domain.usecase.GetMessagesUseCase
+import com.example.myapplication.domain.usecase.GetSelectedMessageUseCase
+import com.example.myapplication.domain.usecase.SaveSelectedMessageUseCase
 import com.example.myapplication.domain.usecase.UpdateMessageUseCase
 import com.example.myapplication.model.data.provider.NotificationProvider
 import com.example.myapplication.model.data.ReminderPreferences
@@ -29,11 +33,14 @@ import org.koin.dsl.module
 val appModule = module {
     factory { AddMessageUseCase(get()) }
     factory { CreateReminderUseCase(get()) }
+    factory { CreateReminderWithTimePickerUseCase(get()) }
     single<IDispatchersProvider> { DefaultDispatchersProvider() }
     factory { DeleteMessageUseCase(get()) }
+    factory { DeleteSelectedMessageUseCase(get()) }
     single { FirstRunManager(androidContext()) }
     factory { GetMessagesUseCase(get()) }
     factory { GetFavoriteMessageUseCase(get()) }
+    factory { GetSelectedMessageUseCase(get()) }
     single { MessagesLocalDataSource(androidContext()) }
 
     single<IMessagesRepository> { MessagesRepository(get()) }
@@ -47,10 +54,11 @@ val appModule = module {
     // Repository
     single { ReminderRepository(get(), get()) }
     factory { UpdateMessageUseCase(get()) }
+    factory { SaveSelectedMessageUseCase(get()) }
     worker { ReminderWorker(androidContext(), get(), get()) }
     // ViewModel
-    viewModel { MainViewModel(get(),get(), get(), get(),get()) }
+    viewModel { MainViewModel(get(),get(), get(), get(), get(),get(),get()) }
     viewModel { MessagesViewModel(get(), get(), get(),get()) }
-    viewModel { MessagesPickerViewModel(get()) }
+    viewModel { MessagesPickerViewModel(get(), get()) }
     viewModel { PermissionViewModel(get(), get()) }
 }

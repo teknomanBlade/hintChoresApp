@@ -2,6 +2,7 @@ package com.example.myapplication.domain.messages
 
 import com.example.myapplication.core.messages.MessagesLocalDataSource
 import com.example.myapplication.model.data.entities.ReminderMessage
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -17,6 +18,13 @@ class MessagesRepository (private val local: MessagesLocalDataSource
         return messages.firstOrNull { it.isFavorite }
     }
 
+    override suspend fun getSelectedMessage(): ReminderMessage? {
+        local.getSelectedMessage().first()?.let {
+            return ReminderMessage(System.currentTimeMillis(), it)
+        }
+        return null
+    }
+
     override suspend fun addMessage(text: String) = mutex.withLock {
         val current = local.getMessages().toMutableList()
         current.add(ReminderMessage(System.currentTimeMillis(), text))
@@ -26,6 +34,10 @@ class MessagesRepository (private val local: MessagesLocalDataSource
     override suspend fun deleteMessage(id: Long) = mutex.withLock {
         val updated = local.getMessages().filterNot { it.id == id }
         local.saveMessages(updated)
+    }
+
+    override suspend fun deleteSelectedMessage() = mutex.withLock {
+        local.deleteSelectedMessage()
     }
 
     override suspend fun updateMessage(id: Long) = mutex.withLock {
@@ -43,5 +55,9 @@ class MessagesRepository (private val local: MessagesLocalDataSource
 
         // 3. Guardamos la lista completa (ahora con todos los mensajes)
         local.saveMessages(updatedList)
+    }
+
+    override suspend fun saveSelectedMessage(text: String) {
+        local.saveSelectedMessage(text)
     }
 }

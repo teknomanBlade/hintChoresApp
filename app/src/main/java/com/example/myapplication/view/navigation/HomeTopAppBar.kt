@@ -10,11 +10,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import com.example.myapplication.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeTopAppBar(onAppInfo: () -> Unit = {}){
+fun HomeTopAppBar(onAppInfo: () -> Unit = {}, onMessageSelection: () -> Unit = {}){
     TopAppBar(
         title = {
             Text(
@@ -25,8 +27,13 @@ fun HomeTopAppBar(onAppInfo: () -> Unit = {}){
               titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer)
            , actions = {
             IconButton(onClick = { onAppInfo() }) {
-                Icon(imageVector = Icons.Default.Info,
+                Icon(painter = painterResource(id = R.drawable.ic_app_info),
                     contentDescription = "App info",
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer)
+            }
+            IconButton(onClick = { onMessageSelection() }) {
+                Icon(painter = painterResource(id = R.drawable.ic_message_select),
+                    contentDescription = "Message selection",
                     tint = MaterialTheme.colorScheme.onPrimaryContainer)
             }
         })

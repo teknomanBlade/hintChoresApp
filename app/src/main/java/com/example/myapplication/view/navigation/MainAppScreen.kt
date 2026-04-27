@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.core.dialog.AppInfoDialog
+import com.example.myapplication.core.dialog.MessagePickerDialog
+import com.example.myapplication.viewmodel.MessagesPickerViewModel
 import com.example.myapplication.viewmodel.PermissionViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -22,7 +24,7 @@ fun MainAppScreen(viewModel: PermissionViewModel = koinViewModel()) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val isFirstRun by viewModel.isFirstRun.collectAsState()
-
+    var showPicker by remember { mutableStateOf(false) }
     // Mientras el valor sea null (está cargando de DataStore), podemos mostrar un Splash o nada
     if (isFirstRun == null) {
         // Pantalla de carga opcional
@@ -36,7 +38,7 @@ fun MainAppScreen(viewModel: PermissionViewModel = koinViewModel()) {
     }
 
     Scaffold(
-        topBar = { HomeTopAppBar { showInfoDialog = true } },
+        topBar = { HomeTopAppBar( { showInfoDialog = true }, onMessageSelection = { showPicker = true }) },
         bottomBar = {
             // Solo mostramos la barra si NO estamos en la pantalla de permisos
             if (currentRoute != Screen.PermissionsScreen.route) {
@@ -53,5 +55,18 @@ fun MainAppScreen(viewModel: PermissionViewModel = koinViewModel()) {
     }
     if(showInfoDialog){
         AppInfoDialog { showInfoDialog = false }
+    }
+    if (showPicker) {
+        val vmPicker: MessagesPickerViewModel = koinViewModel()
+        val messages by vmPicker.messages.collectAsState()
+
+        MessagePickerDialog(
+            messages = messages,
+            onDismiss = { showPicker = false },
+            onSelected = { msg ->
+                showPicker = false
+                vmPicker.saveMessageSelected(message = msg.text)
+            }
+        )
     }
 }
