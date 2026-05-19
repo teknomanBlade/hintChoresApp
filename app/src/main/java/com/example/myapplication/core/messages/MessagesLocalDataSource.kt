@@ -19,6 +19,7 @@ class MessagesLocalDataSource(
 
     private val key = stringPreferencesKey("messages_json")
     private val SELECTED_MESSAGE_KEY = stringPreferencesKey("selected_message")
+    private val SELECTED_SOUND_KEY = stringPreferencesKey("selected_notification_sound")
     suspend fun getMessages(): List<ReminderMessage> {
         val prefs = context.dataStore.data.first()
         val json = prefs[key] ?: return emptyList()
@@ -37,11 +38,18 @@ class MessagesLocalDataSource(
         }
     }
 
+     suspend fun saveSelectedSound(sound: String) {
+         context.dataStore.edit { it[SELECTED_SOUND_KEY] = sound }
+    }
+
     suspend fun deleteSelectedMessage(){
         context.dataStore.edit { it.remove(SELECTED_MESSAGE_KEY) }
     }
     // Función para recuperar (como Flow)
     fun getSelectedMessage(): Flow<String?> = context.dataStore.data.map { preferences ->
         preferences[SELECTED_MESSAGE_KEY]
+    }
+    fun getSelectedSound(): Flow<String?> = context.dataStore.data.map { preferences ->
+        preferences[SELECTED_SOUND_KEY]
     }
 }

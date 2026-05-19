@@ -8,9 +8,12 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import androidx.exifinterface.media.ExifInterface
 import androidx.core.app.NotificationCompat
+import androidx.work.workDataOf
 import com.example.myapplication.R
+import com.example.myapplication.model.data.ReminderWorker
 
 class NotificationProvider {
+
     fun createChannel(context: Context) {
         val channel = NotificationChannel(
             "reminder_channel",
@@ -21,7 +24,40 @@ class NotificationProvider {
         val manager = context.getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(channel)
     }
+    fun showReminder(context: Context, message:String, imagePath: String?,
+                     channelId: String) {
 
+        val builder = NotificationCompat.Builder(context, channelId)
+            .setSmallIcon(R.drawable.ic_push_notification_hint)
+            .setContentTitle("Recordatorio")
+            .setContentText("$message 😉")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+        imagePath?.let { path ->
+            var bitmap = BitmapFactory.decodeFile(path)
+            // Corregir rotación basada en metadatos EXIF
+            val exif = ExifInterface(path)
+            val orientation = exif.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED
+            )
+
+            bitmap = when (orientation) {
+                ExifInterface.ORIENTATION_ROTATE_90 -> rotateImage(bitmap, 90f)
+                ExifInterface.ORIENTATION_ROTATE_180 -> rotateImage(bitmap, 180f)
+                ExifInterface.ORIENTATION_ROTATE_270 -> rotateImage(bitmap, 270f)
+                else -> bitmap
+            }
+            builder.setStyle(
+                NotificationCompat.BigPictureStyle().bigPicture(bitmap)
+            )
+        }
+
+        val manager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        manager.notify(System.currentTimeMillis().toInt(), builder.build())
+    }
     fun showReminder(context: Context, message:String ,imagePath: String?) {
 
         val builder = NotificationCompat.Builder(context, "reminder_channel")

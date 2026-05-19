@@ -2,6 +2,7 @@ package com.example.myapplication.domain.messages
 
 import com.example.myapplication.core.messages.MessagesLocalDataSource
 import com.example.myapplication.model.data.entities.ReminderMessage
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -59,5 +60,13 @@ class MessagesRepository (private val local: MessagesLocalDataSource
 
     override suspend fun saveSelectedMessage(text: String) {
         local.saveSelectedMessage(text)
+    }
+
+    override suspend fun saveSelectedSound(sound: String) {
+        local.saveSelectedSound(sound)
+    }
+
+    override fun getSelectedSound() : Flow<String?> {
+        return local.getSelectedSound()
     }
 }

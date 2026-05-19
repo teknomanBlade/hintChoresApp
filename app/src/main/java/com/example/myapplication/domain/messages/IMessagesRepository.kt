@@ -1,6 +1,7 @@
 package com.example.myapplication.domain.messages
 
 import com.example.myapplication.model.data.entities.ReminderMessage
+import kotlinx.coroutines.flow.Flow
 
 interface IMessagesRepository {
     suspend fun getMessages(): List<ReminderMessage>
@@ -11,4 +12,6 @@ interface IMessagesRepository {
     suspend fun deleteSelectedMessage()
     suspend fun updateMessage(id: Long)
     suspend fun saveSelectedMessage(text: String)
+    suspend fun saveSelectedSound(sound: String)
+    fun getSelectedSound(): Flow<String?>
 }

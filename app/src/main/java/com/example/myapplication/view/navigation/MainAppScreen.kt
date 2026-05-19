@@ -1,7 +1,10 @@
 package com.example.myapplication.view.navigation
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -13,8 +16,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.core.dialog.AppInfoDialog
 import com.example.myapplication.core.dialog.MessagePickerDialog
+import com.example.myapplication.view.soundpicker.SoundPicker
 import com.example.myapplication.viewmodel.MessagesPickerViewModel
 import com.example.myapplication.viewmodel.PermissionViewModel
+import com.example.myapplication.viewmodel.SoundPickerViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -25,6 +30,8 @@ fun MainAppScreen(viewModel: PermissionViewModel = koinViewModel()) {
     val currentRoute = navBackStackEntry?.destination?.route
     val isFirstRun by viewModel.isFirstRun.collectAsState()
     var showPicker by remember { mutableStateOf(false) }
+    var showSoundPicker by remember { mutableStateOf(false) }
+
     // Mientras el valor sea null (está cargando de DataStore), podemos mostrar un Splash o nada
     if (isFirstRun == null) {
         // Pantalla de carga opcional
@@ -38,7 +45,7 @@ fun MainAppScreen(viewModel: PermissionViewModel = koinViewModel()) {
     }
 
     Scaffold(
-        topBar = { HomeTopAppBar( { showInfoDialog = true }, onMessageSelection = { showPicker = true }) },
+        topBar = { HomeTopAppBar( onAppInfo = { showInfoDialog = true }, onMessageSelection = { showPicker = true }, onSoundSelection = { showSoundPicker = true }) },
         bottomBar = {
             // Solo mostramos la barra si NO estamos en la pantalla de permisos
             if (currentRoute != Screen.PermissionsScreen.route) {
@@ -66,6 +73,27 @@ fun MainAppScreen(viewModel: PermissionViewModel = koinViewModel()) {
             onSelected = { msg ->
                 showPicker = false
                 vmPicker.saveMessageSelected(message = msg.text)
+            }
+        )
+    }
+    if (showSoundPicker) {
+        val vmSoundPicker:SoundPickerViewModel = koinViewModel()
+        val currentSound by vmSoundPicker.selectedSound.collectAsState()
+        AlertDialog(
+            onDismissRequest = { showSoundPicker = false },
+            title = { Text("Seleccionar Tono") },
+            text = {
+                // Aquí usamos tu componente SoundPicker.kt
+                SoundPicker(
+                    selected = currentSound,
+                    onSelected = {
+                        vmSoundPicker.onSoundSelected(it)
+                        showSoundPicker = false // Cerrar al seleccionar
+                    }
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { showSoundPicker = false }) { Text("Cancelar") }
             }
         )
     }

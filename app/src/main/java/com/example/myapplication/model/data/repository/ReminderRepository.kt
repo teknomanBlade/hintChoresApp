@@ -1,5 +1,6 @@
 package com.example.myapplication.model.data.repository
 
+import com.example.myapplication.domain.model.NotificationSound
 import com.example.myapplication.domain.model.ReminderDelay
 import com.example.myapplication.model.data.ReminderPreferences
 import com.example.myapplication.model.data.ReminderScheduler
@@ -16,5 +17,8 @@ class ReminderRepository(private val prefs : ReminderPreferences,
     }
     fun scheduleReminder(message:String,imagePath: String? = null, reminderDelay: ReminderDelay){
         scheduler.scheduleReminder(message,imagePath,reminderDelay)
+    }
+    fun scheduleReminder(message:String,imagePath: String? = null, reminderDelay: ReminderDelay, sound: NotificationSound){
+        scheduler.scheduleReminder(message,imagePath,reminderDelay,sound)
     }
 }

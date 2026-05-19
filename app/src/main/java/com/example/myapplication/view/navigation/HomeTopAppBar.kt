@@ -16,7 +16,7 @@ import com.example.myapplication.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeTopAppBar(onAppInfo: () -> Unit = {}, onMessageSelection: () -> Unit = {}){
+fun HomeTopAppBar(onAppInfo: () -> Unit = {}, onMessageSelection: () -> Unit = {}, onSoundSelection: () -> Unit = {}){
     TopAppBar(
         title = {
             Text(
@@ -34,6 +34,11 @@ fun HomeTopAppBar(onAppInfo: () -> Unit = {}, onMessageSelection: () -> Unit = {
             IconButton(onClick = { onMessageSelection() }) {
                 Icon(painter = painterResource(id = R.drawable.ic_message_select),
                     contentDescription = "Message selection",
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer)
+            }
+            IconButton(onClick = { onSoundSelection() }) {
+                Icon(painter = painterResource(id = R.drawable.ic_notification_sound_pick),
+                    contentDescription = "SFX Notification selection",
                     tint = MaterialTheme.colorScheme.onPrimaryContainer)
             }
         })
